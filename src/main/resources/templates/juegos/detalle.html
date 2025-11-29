@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <title th:text="${juego.titulo} + ' - Detalle'">Detalle del Juego</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/juegos}">Juegos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${juego.titulo}">Juego</li>
+                        </ol>
+                    </nav>
+
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-dark text-white">
+                            <h3 class="mb-0" th:text="${juego.titulo}">Nombre del Juego</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Imagen -->
+                                <div class="col-md-4 text-center mb-3">
+                                    <img th:if="${juego.imagen}" 
+                                         th:src="${juego.imagen}" 
+                                         th:alt="${juego.titulo}"
+                                         class="img-fluid rounded shadow"
+                                         style="max-height: 300px; object-fit: cover;">
+                                    <div th:unless="${juego.imagen}" class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                                        <div class="text-center text-muted">
+                                            <i class="fas fa-image fa-4x mb-3"></i>
+                                            <p>Sin imagen</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Información -->
+                                <div class="col-md-8">
+                                    <h5 class="mb-3">Información del Juego</h5>
+                                    
+                                    <div class="mb-3">
+                                        <strong><i class="fas fa-tag"></i> Género:</strong>
+                                        <span class="badge bg-secondary ms-2" th:text="${juego.genero}">Género</span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <strong><i class="fas fa-gamepad"></i> Plataforma:</strong>
+                                        <span class="badge bg-info ms-2" th:text="${juego.plataforma}">Plataforma</span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <strong><i class="fas fa-star text-warning"></i> Rating:</strong>
+                                        <span th:text="${juego.rating != null ? juego.rating : 'Sin valoraciones'}">0.0</span>
+                                        <small class="text-muted" th:if="${juego.totalValoraciones != null}">
+                                            (<span th:text="${juego.totalValoraciones}">0</span> valoraciones)
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3" th:if="${juego.descripcion}">
+                                        <strong><i class="fas fa-align-left"></i> Descripción:</strong>
+                                        <p class="mt-2" th:text="${juego.descripcion}">Descripción del juego</p>
+                                    </div>
+
+                                    <div class="mb-3" th:unless="${juego.descripcion}">
+                                        <p class="text-muted"><em>No hay descripción disponible</em></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                        <a th:href="@{/juegos}" class="btn btn-secondary">
+                                            <i class="fas fa-arrow-left"></i> Volver a la lista
+                                        </a>
+                                        <div sec:authorize="hasRole('ADMIN')">
+                                            <a th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-warning">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <form th:action="@{/juegos/eliminar/{id}(id=${juego.id})}" method="post" style="display: inline;">
+                                                <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('¿Está seguro de eliminar este juego?\n\nEsta acción eliminará también todas las guías asociadas.');">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Guías relacionadas (opcional, si quieres mostrarlas) -->
+                    <div class="card mt-4 shadow">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-book"></i> Guías disponibles para este juego</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">
+                                <em>Próximamente: Lista de guías relacionadas con este juego</em>
+                            </p>
+                            <a th:href="@{/guias}" class="btn btn-outline-primary">
+                                <i class="fas fa-search"></i> Ver todas las guías
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
