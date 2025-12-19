@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <title th:text="${juego.id == null ? 'Nuevo Juego' : 'Editar Juego'}">Gestión de Juego</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 th:text="${juego.id == null ? 'Nuevo Juego' : 'Editar Juego'}">Gestión de Juego</h4>
+                        </div>
+                        <div class="card-body">
+                                <form th:action="${juego.id == null} ? @{/juegos/guardar} : @{/juegos/editar/{id}(id=${juego.id})}"
+                                                                            method="post"
+                                                                            enctype="multipart/form-data"
+                                                                            th:object="${juego}">
+                                                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger mt-2" role="alert">
+                                        <strong>Hay errores en el formulario:</strong>
+                                        <ul class="mb-0">
+                                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                        </ul>
+                                    </div>
+                                
+                                <div class="mb-3">
+                                    <label for="titulo" class="form-label">Título del Juego</label>
+                                    <input type="text" class="form-control" id="titulo" th:field="*{titulo}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3"></textarea>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Categorías (selecciona al menos una)</label>
+                                        <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                            <div th:each="cat : ${categorias}" class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       th:id="'cat-' + ${cat.id}" 
+                                                       name="categoriaIds" 
+                                                       th:value="${cat.id}"
+                                                       th:checked="${juego.categorias != null and juego.categorias.contains(cat)}">
+                                                <label class="form-check-label" th:for="'cat-' + ${cat.id}" th:text="${cat.nombre}">Categoría</label>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Marca las categorías que correspondan</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Plataformas (selecciona al menos una)</label>
+                                        <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                            <div th:each="plat : ${plataformas}" class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       th:id="'plat-' + ${plat.id}" 
+                                                       name="plataformaIds" 
+                                                       th:value="${plat.id}"
+                                                       th:checked="${juego.plataformas != null and juego.plataformas.contains(plat)}">
+                                                <label class="form-check-label" th:for="'plat-' + ${plat.id}" th:text="${plat.nombre}">Plataforma</label>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Marca las plataformas disponibles</small>
+                                    </div>
+                                </div>
+
+                                <!-- Calificación y totalValoraciones se manejan en backend -->
+
+                                <div class="mb-3">
+                                    <label for="imagenArchivo" class="form-label">Imagen del Juego</label>
+                                    <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*">
+                                    <div th:if="${juego.imagen}" class="mt-2">
+                                        <img th:src="${juego.imagen}" alt="Imagen actual" class="img-thumbnail" style="max-height: 200px;">
+                                        <p class="text-muted">Deja vacío para mantener la imagen actual</p>
+                                    </div>
+                                </div>
+
+                                <div class="text-end d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted" th:if="${juego.id}" th:text="${'ID: ' + juego.id}"></small>
+                                    </div>
+                                    <div>
+                                        <a th:href="@{/juegos}" class="btn btn-secondary">Cancelar</a>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
