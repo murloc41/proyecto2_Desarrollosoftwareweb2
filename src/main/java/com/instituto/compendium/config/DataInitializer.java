@@ -42,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("=== Inicializando datos del sistema ===");
         
         // 1. Crear plataformas
-        com.instituto.compendium.model.Plataforma platPC = plataformaRepository.findByNombre("PC").orElseGet(() -> {
+        plataformaRepository.findByNombre("PC").orElseGet(() -> {
             com.instituto.compendium.model.Plataforma p = new com.instituto.compendium.model.Plataforma();
             p.setNombre("PC");
             p.setDescripcion("Computadora personal");
@@ -50,7 +50,7 @@ public class DataInitializer implements CommandLineRunner {
             return plataformaRepository.save(p);
         });
 
-        com.instituto.compendium.model.Plataforma platPS5 = plataformaRepository.findByNombre("PS5").orElseGet(() -> {
+        plataformaRepository.findByNombre("PS5").orElseGet(() -> {
             com.instituto.compendium.model.Plataforma p = new com.instituto.compendium.model.Plataforma();
             p.setNombre("PS5");
             p.setDescripcion("PlayStation 5");
@@ -58,7 +58,7 @@ public class DataInitializer implements CommandLineRunner {
             return plataformaRepository.save(p);
         });
 
-        com.instituto.compendium.model.Plataforma platPS4 = plataformaRepository.findByNombre("PS4").orElseGet(() -> {
+        plataformaRepository.findByNombre("PS4").orElseGet(() -> {
             com.instituto.compendium.model.Plataforma p = new com.instituto.compendium.model.Plataforma();
             p.setNombre("PS4");
             p.setDescripcion("PlayStation 4");
@@ -66,7 +66,7 @@ public class DataInitializer implements CommandLineRunner {
             return plataformaRepository.save(p);
         });
 
-        com.instituto.compendium.model.Plataforma platXbox = plataformaRepository.findByNombre("Xbox Series X|S").orElseGet(() -> {
+        plataformaRepository.findByNombre("Xbox Series X|S").orElseGet(() -> {
             com.instituto.compendium.model.Plataforma p = new com.instituto.compendium.model.Plataforma();
             p.setNombre("Xbox Series X|S");
             p.setDescripcion("Xbox Series X y S");
@@ -74,7 +74,7 @@ public class DataInitializer implements CommandLineRunner {
             return plataformaRepository.save(p);
         });
 
-        com.instituto.compendium.model.Plataforma platSwitch = plataformaRepository.findByNombre("Nintendo Switch").orElseGet(() -> {
+        plataformaRepository.findByNombre("Nintendo Switch").orElseGet(() -> {
             com.instituto.compendium.model.Plataforma p = new com.instituto.compendium.model.Plataforma();
             p.setNombre("Nintendo Switch");
             p.setDescripcion("Nintendo Switch");
@@ -115,7 +115,7 @@ public class DataInitializer implements CommandLineRunner {
             return categoriaRepository.save(c);
         });
 
-        com.instituto.compendium.model.Categoria catAccion = categoriaRepository.findByNombre("Acción").orElseGet(() -> {
+        categoriaRepository.findByNombre("Acción").orElseGet(() -> {
             com.instituto.compendium.model.Categoria c = new com.instituto.compendium.model.Categoria();
             c.setNombre("Acción");
             c.setDescripcion("Juegos de acción y combate");
