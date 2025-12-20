@@ -38,6 +38,8 @@ public class JuegoController {
         model.addAttribute("juego", new Juego());
         model.addAttribute("categorias", categoriaRepository.findAll());
         model.addAttribute("plataformas", plataformaRepository.findAll());
+        model.addAttribute("categoriaIdsSeleccionados", java.util.Collections.emptyList());
+        model.addAttribute("plataformaIdsSeleccionados", java.util.Collections.emptyList());
         return "juegos/form";
     }
 
@@ -57,9 +59,7 @@ public class JuegoController {
         if (plataformaIds == null || plataformaIds.isEmpty()) {
             result.reject("plataformasMin", "Debe seleccionar al menos una plataforma");
         }
-        if ((imagen == null || imagen.isEmpty()) && (juego.getImagen() == null || juego.getImagen().isEmpty())) {
-            result.rejectValue("imagen", "NotBlank.juego.imagen", "La imagen es obligatoria");
-        }
+        // Imagen opcional: si no hay, se guarda sin imagen
         if (result.hasErrors()) {
             System.out.println("[ERROR] guardarJuego -> errores de binding: " + result.getAllErrors());
             model.addAttribute("categorias", categoriaRepository.findAll());
@@ -104,9 +104,15 @@ public class JuegoController {
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
-        model.addAttribute("juego", juegoService.obtenerJuego(id));
+        Juego juego = juegoService.obtenerJuego(id);
+        model.addAttribute("juego", juego);
         model.addAttribute("categorias", categoriaRepository.findAll());
         model.addAttribute("plataformas", plataformaRepository.findAll());
+        // Preselección por IDs para evitar problemas de equals/contains
+        java.util.List<Long> seleccionCats = juego.getCategorias().stream().map(c -> c.getId()).toList();
+        java.util.List<Long> seleccionPlats = juego.getPlataformas().stream().map(p -> p.getId()).toList();
+        model.addAttribute("categoriaIdsSeleccionados", seleccionCats);
+        model.addAttribute("plataformaIdsSeleccionados", seleccionPlats);
         return "juegos/form";
     }
 
@@ -127,13 +133,13 @@ public class JuegoController {
         if (plataformaIds == null || plataformaIds.isEmpty()) {
             result.reject("plataformasMin", "Debe seleccionar al menos una plataforma");
         }
-        if ((imagen == null || imagen.isEmpty()) && (juego.getImagen() == null || juego.getImagen().isEmpty())) {
-            result.rejectValue("imagen", "NotBlank.juego.imagen", "La imagen es obligatoria");
-        }
+        // Imagen opcional en edición también
         if (result.hasErrors()) {
             System.out.println("[ERROR] actualizarJuego -> errores de binding: " + result.getAllErrors());
             model.addAttribute("categorias", categoriaRepository.findAll());
             model.addAttribute("plataformas", plataformaRepository.findAll());
+            model.addAttribute("categoriaIdsSeleccionados", categoriaIds != null ? categoriaIds : java.util.Collections.emptyList());
+            model.addAttribute("plataformaIdsSeleccionados", plataformaIds != null ? plataformaIds : java.util.Collections.emptyList());
             model.addAttribute("mensaje", "Hay errores en el formulario. Verifique los campos.");
             model.addAttribute("tipo", "danger");
             return "juegos/form";

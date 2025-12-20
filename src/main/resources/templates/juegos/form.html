@@ -48,7 +48,7 @@
                                                        th:id="'cat-' + ${cat.id}" 
                                                        name="categoriaIds" 
                                                        th:value="${cat.id}"
-                                                       th:checked="${juego.categorias != null and juego.categorias.contains(cat)}">
+                                                       th:checked="${categoriaIdsSeleccionados != null and categoriaIdsSeleccionados.contains(cat.id)}">
                                                 <label class="form-check-label" th:for="'cat-' + ${cat.id}" th:text="${cat.nombre}">Categoría</label>
                                             </div>
                                         </div>
@@ -62,7 +62,7 @@
                                                        th:id="'plat-' + ${plat.id}" 
                                                        name="plataformaIds" 
                                                        th:value="${plat.id}"
-                                                       th:checked="${juego.plataformas != null and juego.plataformas.contains(plat)}">
+                                                       th:checked="${plataformaIdsSeleccionados != null and plataformaIdsSeleccionados.contains(plat.id)}">
                                                 <label class="form-check-label" th:for="'plat-' + ${plat.id}" th:text="${plat.nombre}">Plataforma</label>
                                             </div>
                                         </div>
