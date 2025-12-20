@@ -7,6 +7,7 @@ import com.instituto.compendium.repository.GuiaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -36,17 +37,28 @@ public class GuiaService implements IGuiaService {
 
     @Autowired
     private GuiaRepository guiaRepository;
+    private final Path rootLocation;
 
-    private final Path rootLocation = Paths.get("uploads");
-
-    public GuiaService() {
+    public GuiaService(@Value("${app.upload.dir:uploads}") String uploadDir) {
+        Path resolvedPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path targetPath = resolvedPath;
         try {
-            Files.createDirectories(rootLocation);
-            logger.info("Directorio de almacenamiento inicializado: {}", rootLocation);
-        } catch (Exception e) {
-            logger.error("No se pudo inicializar el almacenamiento: {}", rootLocation, e);
-            throw new RuntimeException("No se pudo inicializar el almacenamiento", e);
+            Files.createDirectories(targetPath);
+            logger.info("Directorio de almacenamiento inicializado: {}", targetPath);
+        } catch (Exception primaryEx) {
+            Path fallbackPath = Paths.get(System.getProperty("java.io.tmpdir"), "uploads")
+                    .toAbsolutePath()
+                    .normalize();
+            try {
+                Files.createDirectories(fallbackPath);
+                targetPath = fallbackPath;
+                logger.warn("Ruta de subida no disponible ({}), usando fallback: {}", resolvedPath, fallbackPath);
+            } catch (Exception fallbackEx) {
+                logger.error("No se pudo inicializar el almacenamiento ni en {} ni en {}", resolvedPath, fallbackPath, fallbackEx);
+                throw new RuntimeException("No se pudo inicializar el almacenamiento", fallbackEx);
+            }
         }
+        this.rootLocation = targetPath;
     }
 
     @Transactional
