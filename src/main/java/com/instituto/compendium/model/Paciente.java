@@ -25,9 +25,10 @@ public class Paciente {
     @Column(nullable = false)
     private Integer piso;
     
-    @NotBlank(message = "El turno no puede estar vacío")
+    @NotNull(message = "El turno no puede ser nulo")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String turno;
+    private Turno turno;
 
     // Getters y Setters
     public Long getId() { return id; }
@@ -42,6 +43,6 @@ public class Paciente {
     public Integer getPiso() { return piso; }
     public void setPiso(Integer piso) { this.piso = piso; }
     
-    public String getTurno() { return turno; }
-    public void setTurno(String turno) { this.turno = turno; }
+    public Turno getTurno() { return turno; }
+    public void setTurno(Turno turno) { this.turno = turno; }
 }

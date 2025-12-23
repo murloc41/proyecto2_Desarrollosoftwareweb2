@@ -312,43 +312,47 @@ public class DataInitializer implements CommandLineRunner {
         
         // Sembrar datos para Pacientes
         System.out.println("\n--- Inicializando Pacientes ---");
-        Paciente p1 = new Paciente();
-        p1.setNombre("Juan Pérez");
-        p1.setRut("12.345.678-9");
-        p1.setPiso(2);
-        p1.setTurno("Mañana");
-        pacienteRepository.save(p1);
-        System.out.println("✓ Paciente: Juan Pérez");
+        if (pacienteRepository.count() == 0) {
+            Paciente p1 = new Paciente();
+            p1.setNombre("Ana María Soto");
+            p1.setRut("19.456.789-K");
+            p1.setPiso(3);
+            p1.setTurno(com.instituto.compendium.model.Turno.MANANA);
+            pacienteRepository.save(p1);
+            System.out.println("✓ Paciente: Ana María Soto");
 
-        Paciente p2 = new Paciente();
-        p2.setNombre("María García");
-        p2.setRut("98.765.432-1");
-        p2.setPiso(4);
-        p2.setTurno("Tarde");
-        pacienteRepository.save(p2);
-        System.out.println("✓ Paciente: María García");
+            Paciente p2 = new Paciente();
+            p2.setNombre("Roberto González");
+            p2.setRut("15.123.456-7");
+            p2.setPiso(5);
+            p2.setTurno(com.instituto.compendium.model.Turno.TARDE);
+            pacienteRepository.save(p2);
+            System.out.println("✓ Paciente: Roberto González");
 
-        Paciente p3 = new Paciente();
-        p3.setNombre("Carlos López");
-        p3.setRut("55.555.555-5");
-        p3.setPiso(1);
-        p3.setTurno("Noche");
-        pacienteRepository.save(p3);
-        System.out.println("✓ Paciente: Carlos López");
+            Paciente p3 = new Paciente();
+            p3.setNombre("Javier Fuentes");
+            p3.setRut("18.987.654-2");
+            p3.setPiso(1);
+            p3.setTurno(com.instituto.compendium.model.Turno.NOCHE);
+            pacienteRepository.save(p3);
+            System.out.println("✓ Paciente: Javier Fuentes");
+        }
 
         // Sembrar datos para Medicamentos
         System.out.println("\n--- Inicializando Medicamentos ---");
-        Medicamento m1 = new Medicamento("Amoxicilina", 500, "Antibiótico", false);
-        medicamentoRepository.save(m1);
-        System.out.println("✓ Medicamento: Amoxicilina");
+        if (medicamentoRepository.count() == 0) {
+            Medicamento m1 = new Medicamento("Amlodipino", 50, "Antiinflamatorio", false);
+            medicamentoRepository.save(m1);
+            System.out.println("✓ Medicamento: Amlodipino");
 
-        Medicamento m2 = new Medicamento("Metformina", 850, "Antidiabético", false);
-        medicamentoRepository.save(m2);
-        System.out.println("✓ Medicamento: Metformina");
+            Medicamento m2 = new Medicamento("Morfina", 10, "Analgésico", true);
+            medicamentoRepository.save(m2);
+            System.out.println("✓ Medicamento: Morfina (uso delicado)");
 
-        Medicamento m3 = new Medicamento("Warfarina", 5, "Anticoagulante", true);
-        medicamentoRepository.save(m3);
-        System.out.println("✓ Medicamento: Warfarina (uso delicado)");
+            Medicamento m3 = new Medicamento("Amoxicilina", 500, "Antibiótico", false);
+            medicamentoRepository.save(m3);
+            System.out.println("✓ Medicamento: Amoxicilina");
+        }
         
         System.out.println("\n=== Inicialización completada ===");
         System.out.println("Accede a H2 Console en: http://localhost:8080/h2-console");
