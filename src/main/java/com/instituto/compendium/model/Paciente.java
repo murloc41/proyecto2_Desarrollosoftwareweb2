@@ -1,6 +1,7 @@
 package com.instituto.compendium.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "pacientes")
@@ -9,15 +10,22 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotBlank(message = "El nombre no puede estar vacío")
     @Column(nullable = false)
     private String nombre;
     
-    @Column(nullable = false)
+    @NotBlank(message = "El RUT no puede estar vacío")
+    @Pattern(regexp = "^\\d{1,2}\\.?\\d{3}\\.?\\d{3}[-]?[0-9K]$", message = "El RUT debe tener formato válido (ej: 12.345.678-9)")
+    @Column(nullable = false, unique = true)
     private String rut;
     
+    @NotNull(message = "El piso no puede ser nulo")
+    @Min(value = 1, message = "El piso debe ser mayor a 0")
+    @Max(value = 20, message = "El piso no puede ser mayor a 20")
     @Column(nullable = false)
     private Integer piso;
     
+    @NotBlank(message = "El turno no puede estar vacío")
     @Column(nullable = false)
     private String turno;
 

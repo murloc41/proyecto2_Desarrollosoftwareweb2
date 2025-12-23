@@ -4,10 +4,14 @@ import com.instituto.compendium.model.Role;
 import com.instituto.compendium.model.Usuario;
 import com.instituto.compendium.model.Juego;
 import com.instituto.compendium.model.Guia;
+import com.instituto.compendium.model.Paciente;
+import com.instituto.compendium.model.Medicamento;
 import com.instituto.compendium.repository.RoleRepository;
 import com.instituto.compendium.repository.UsuarioRepository;
 import com.instituto.compendium.repository.JuegoRepository;
 import com.instituto.compendium.repository.GuiaRepository;
+import com.instituto.compendium.repository.PacienteRepository;
+import com.instituto.compendium.repository.MedicamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +40,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private com.instituto.compendium.repository.PlataformaRepository plataformaRepository;
+
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private MedicamentoRepository medicamentoRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -299,6 +309,46 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("✓ Guías de ejemplo creadas");
             }
         }
+        
+        // Sembrar datos para Pacientes
+        System.out.println("\n--- Inicializando Pacientes ---");
+        Paciente p1 = new Paciente();
+        p1.setNombre("Juan Pérez");
+        p1.setRut("12.345.678-9");
+        p1.setPiso(2);
+        p1.setTurno("Mañana");
+        pacienteRepository.save(p1);
+        System.out.println("✓ Paciente: Juan Pérez");
+
+        Paciente p2 = new Paciente();
+        p2.setNombre("María García");
+        p2.setRut("98.765.432-1");
+        p2.setPiso(4);
+        p2.setTurno("Tarde");
+        pacienteRepository.save(p2);
+        System.out.println("✓ Paciente: María García");
+
+        Paciente p3 = new Paciente();
+        p3.setNombre("Carlos López");
+        p3.setRut("55.555.555-5");
+        p3.setPiso(1);
+        p3.setTurno("Noche");
+        pacienteRepository.save(p3);
+        System.out.println("✓ Paciente: Carlos López");
+
+        // Sembrar datos para Medicamentos
+        System.out.println("\n--- Inicializando Medicamentos ---");
+        Medicamento m1 = new Medicamento("Amoxicilina", 500, "Antibiótico", false);
+        medicamentoRepository.save(m1);
+        System.out.println("✓ Medicamento: Amoxicilina");
+
+        Medicamento m2 = new Medicamento("Metformina", 850, "Antidiabético", false);
+        medicamentoRepository.save(m2);
+        System.out.println("✓ Medicamento: Metformina");
+
+        Medicamento m3 = new Medicamento("Warfarina", 5, "Anticoagulante", true);
+        medicamentoRepository.save(m3);
+        System.out.println("✓ Medicamento: Warfarina (uso delicado)");
         
         System.out.println("\n=== Inicialización completada ===");
         System.out.println("Accede a H2 Console en: http://localhost:8080/h2-console");
